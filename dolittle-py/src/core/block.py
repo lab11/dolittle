@@ -81,7 +81,16 @@ class Block(object):
     def receive(self, *args):
         #on message, add to queue safely
         client, userdata, msg = args
+        # not sure if this is the right place for this, since
+        # source/sink/processors have different semantic requirements for subscriptions
+ """       if msg.payload.title == 'subscribe':
+            pass
+        elif msg.payload.title == 'unsubscribe':
+            pass
+        else:
+            self.receive_buffer.append(msg.payload)"""
         self.receive_buffer.append(msg.payload)
+
 
     def process_loop(self):
         while(True):
