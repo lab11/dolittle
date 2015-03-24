@@ -6,10 +6,15 @@ class MasterControlBoard(Block):
 
 	def process(self, obj):
 		new_obj = str(obj)
+		# if msg_type == app:
+			# for block in blocks, instantiate.
+			# send status
+		# if msg_type == status_request:
+			# send status
 
 if __name__ == "__main__":
 	mcb = MasterControlBoard()
 	name = mcb.name
-	mcb.in_streams = ['{0}/mcb/in'.format(name)]
-	mcb.out_stream = '{0}/mcb/status'.format(name)
+	mcb.in_streams = [name + '/dolittle/apps']
+	mcb.out_streams = [name + '/dolittle/status']
     mcb.client.loop_forever()

@@ -6,14 +6,14 @@ from sys import argv, exit
 class Block(object):
     def __init__(self):
 
-    #def __init__(self, name = None, in_streams = None, out_stream = None, broker_port = 1883, broker_addr = 'localhost'):
+    #def __init__(self, name = None, in_streams = None, out_streams = None, broker_port = 1883, broker_addr = 'localhost'):
     def __init__(self):
         # Defaults    
         self.name = None
         self.receive_buffer = []
         self.send_buffer = []
         self.in_streams = None
-        self.out_stream = None
+        self.out_streams = None
         self.broker_port = 1883
         self.broker_addr = 'localhost'
 
@@ -40,8 +40,8 @@ class Block(object):
                     in_streams = argv[i+1].split(':')
                     self.in_streams = in_streams
                 elif arg == '-out' or arg == '-o':
-                    out_stream = argv[i+1]
-                    self.out_stream = out_stream
+                    out_streams = argv[i+1].split(':')
+                    self.out_streams = out_streams
                 elif arg == '-port' or arg == '-p':
                     port = int(argv[i+1])
                     self.broker_port = port
@@ -111,7 +111,8 @@ class Block(object):
 
     def emit(self):
         msg = self.send_buffer.pop(0)
-        self.client.publish(self.out_stream, msg)
+        for out_stream in self.out_streams:
+            self.client.publish(self.out_stream, msg)
         print("published " + str(msg))
 
     def send(self, msg):
