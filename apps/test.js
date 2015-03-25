@@ -1,1 +1,0 @@
-var object = new Pushmi_Pullyu('Hello');
