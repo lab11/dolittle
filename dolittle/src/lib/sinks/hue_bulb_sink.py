@@ -3,6 +3,7 @@ from phue import Bridge
 import sys
 import random
 import socket
+from time import sleep
 
 class HueBulbSink(Sink):
     def __init__(self):
@@ -15,20 +16,26 @@ class HueBulbSink(Sink):
         except KeyError:
             scene_file = None
 
-        self.bridge = Bridge(self.bridge_addr)
-        light_objects_dict = self.bridge.get_light_objects('name')
-        try:
-            self.bulb = light_objects_dict[self.bulb_name]
-        except KeyError:
-            print("Unknown bulb name. Here is the list of available bulbs at bridge " + self.bridge_addr + ":")
-            print(light_objects_dict.keys())
-            sys.exit()
+        success = False
+        while not success:
+            try:
+                self.bridge = Bridge(self.bridge_addr)
+                light_objects_dict = self.bridge.get_light_objects('name')
+                try:
+                    self.bulb = light_objects_dict[self.bulb_name]
+                except KeyError:
+                    print("Unknown bulb name. Here is the list of available bulbs at bridge " + self.bridge_addr + ":")
+                    print(light_objects_dict.keys())
+                    sys.exit()
 
-        self.bulb_scenes = None
-        if scene_file != None:
-            with open(scene_file) as sf:
-                all_scenes = json.load(sf)
-                self.bulb_scenes =  all_scenes[self.bulb_name.lower().replace(' ', '_')]
+                self.bulb_scenes = None
+                if scene_file != None:
+                    with open(scene_file) as sf:
+                        all_scenes = json.load(sf)
+                        self.bulb_scenes =  all_scenes[self.bulb_name.lower().replace(' ', '_')]
+                success = True
+            except socket.error:
+                sleep(random.random())
 
         self.in_alert = False
         self.stack = {}
