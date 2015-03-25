@@ -1,3 +1,3 @@
 Code for Dolittle and Dolittle apps.
 
-More to come.
+More text to come later.
