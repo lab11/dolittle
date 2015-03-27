@@ -1,6 +1,5 @@
 from ...core.source import PollingSource
 import socket
-from time import sleep
 
 class WemoInsightSource(PollingSource):
     def __init__(self):

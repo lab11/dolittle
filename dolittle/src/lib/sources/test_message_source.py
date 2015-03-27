@@ -1,5 +1,4 @@
 from ...core.source import PollingSource
-from time import sleep
 
 class TestMessageSource(PollingSource):
     def __init__(self):

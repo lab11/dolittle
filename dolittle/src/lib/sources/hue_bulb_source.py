@@ -1,6 +1,5 @@
 from ...core.source import PollingSource
 from phue import Bridge
-from time import sleep
 import sys
 
 class HueBulbSource(PollingSource):

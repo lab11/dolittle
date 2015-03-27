@@ -1,5 +1,4 @@
 from ...core.source import PollingSource
-import time
 
 class MotionDummySource(PollingSource):
     def __init__(self):
