@@ -1,5 +1,6 @@
 from block import Block
 import thread
+from time import sleep
 
 class Source(Block):
 
@@ -25,13 +26,16 @@ class PollingSource(Source):
         self.initialized = False
         thread.start_new_thread(self.polling_loop, ())
 
-    def begin_polling(self):
+    def start_polling(self):
         self.initialized = True
 
     def polling_loop(self):
         while(True):
             if self.initialized:
-                self.poll()
+                poll_interval = self.poll()
+                if poll_interval == None:
+                    poll_interval = 1
+                sleep(poll_interval)
 
     def poll(self):
         raise NotImplementedError
