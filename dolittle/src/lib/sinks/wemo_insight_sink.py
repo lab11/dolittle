@@ -2,7 +2,7 @@ from ...core.sink import Sink
 import socket
 
 class WemoInsightSink(Sink):
-	def __init__(self):
+    def __init__(self):
         super(WemoInsightSink, self).__init__()
 
         self.ip_addr = str(self.params['ip_addr'])
@@ -30,16 +30,16 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
 """
 
     def process(self, msg_json):
-    	msg = msg_json
-    	if msg["type"].lower() in ["turn_off", "turn off"]:
-    		self.turn_off()
+        msg = msg_json
+        if msg["type"].lower() in ["turn_off", "turn off"]:
+            self.turn_off()
         elif msg["type"].lower() in ["turn_on", "turn on"]:
             self.turn_on()
 
-    def turn_off(self):
+    def turn_on(self):
         self.set_state('SetBinaryState', '1')
 
-    def turn_on(self):
+    def turn_off(self):
         self.set_state('SetBinaryState', '0')
 
     # change to set body, also get port logic
@@ -49,7 +49,8 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
             if success:
                 self.current_port = port
                 soap_body = self.set_body.format(binstate=state)
-                soap_header = self.header.format(command=cmd,
+                soap_header = self.header.format(command_type="basicevent",
+                    command=cmd,
                     length=len(soap_body),
                     ipaddr=self.ip_addr,
                     port=self.current_port)
