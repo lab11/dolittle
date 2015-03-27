@@ -31,9 +31,9 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         self.begin_polling()
 
     def poll(self):
-        print("loop")
         status = self.get_insight_status()
         print(status)
+        self.send(status)
         sleep(2)
 
     def get_insight_status(self):
@@ -80,39 +80,36 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         status['energy_used_over_time_window_watthour'] = (float(fields[9])/1000)/60
         return status
 
-
-
     def get_state (self, cmd_type, cmd):
         response = ''
-        #for port in [49153]:
-        for port in range(self.lowest_port+1, self.highest_port):
-            mysocket, success = self.connect(port)
+        for port in range(self.lowest_port, self.highest_port):
+            wemo_socket, success = self.connect(port)
             if success:
                 self.current_port = port
                 soap_body = self.get_body.format(command_type=cmd_type, command=cmd)
                 soap_header = self.header.format(command_type=cmd_type, command=cmd,
                     length=len(soap_body),
                     ipaddr=self.ip_addr,
-                    port=port)
+                    port=self.current_port)
                 soap_header = soap_header.replace('\n', '\r\n')
                 soap = soap_header + '\r\n\r\n' + soap_body
-                mysocket.send(soap.encode())
+                wemo_socket.send(soap.encode())
                 while True:
-                    data = mysocket.recv(1024)
+                    data = wemo_socket.recv(1024)
                     response += data.decode()
                     if '</s:Envelope>' in response:
                         break
-                mysocket.close()
+                wemo_socket.close()
         return response
 
     def connect (self, port):
         connection_attempts = 0
         max_connection_attempts = 2
         connected = False
-        mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        wemo_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         while connection_attempts < max_connection_attempts:
             try:
-                mysocket.connect((self.ip_addr, port))
+                wemo_socket.connect((self.ip_addr, port))
                 connected = True
                 break
             except OSError:
@@ -121,7 +118,7 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
                 connection_attempts += 1
             except socket.error:
                 break
-        return mysocket, connected
+        return wemo_socket, connected
 
 
 
