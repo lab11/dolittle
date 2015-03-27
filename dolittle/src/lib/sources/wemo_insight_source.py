@@ -8,6 +8,7 @@ class WemoInsightSource(PollingSource):
 
         self.ip_addr = str(self.params['ip_addr'])
         self.device_name = str(self.params['device_name']) if 'device_name' in self.params else "Unknown"
+        self.poll_rate_secs = self.params['poll_rate'] if 'poll_rate' in self.params else 2
 
         self.lowest_port = 49152
         self.highest_port = 49158
@@ -28,13 +29,13 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
  </s:Body>
 </s:Envelope>
 """
-        self.begin_polling()
+        self.start_polling()
 
     def poll(self):
         status = self.get_insight_status()
         print(status)
         self.send(status)
-        sleep(2)
+        return self.poll_rate_secs
 
     def get_insight_status(self):
         tag = 'InsightParams'

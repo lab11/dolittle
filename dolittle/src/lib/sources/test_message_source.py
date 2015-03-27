@@ -11,14 +11,12 @@ class TestMessageSource(PollingSource):
             self.delay_secs = self.params["delay_secs"]
 
         self.counter = 0
-        self.begin_polling()
+        self.start_polling()
 
     def poll(self):
         if self.counter == self.delay_secs:
             self.send(self.test_message)
         self.counter += 1
-        sleep(1)
-        #return 1
 
 if __name__ == "__main__":
     block = TestMessageSource()

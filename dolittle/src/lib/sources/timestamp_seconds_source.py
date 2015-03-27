@@ -4,13 +4,14 @@ import time
 class TimestampSecondsSource(PollingSource):
     def __init__(self):
         super(TimestampSecondsSource, self).__init__()
-        self.begin_polling()
+        self.start_polling()
 
     def poll(self):
+        one_second = 1
         timestamp = int(time.time())
         msg = {"type": "timestamp_secs", "timestamp": timestamp}
         self.send(msg)
-        time.sleep(1)
+        return one_second
         
 
 if __name__ == "__main__":

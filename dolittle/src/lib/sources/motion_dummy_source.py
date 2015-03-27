@@ -8,15 +8,15 @@ class MotionDummySource(PollingSource):
         self.count = 0
         self.send_at = [5, 20]
 
-        self.begin_polling()
+        self.start_polling()
 
     def poll(self):
+        one_second = 1
         if self.count in self.send_at:
             msg = {"type": "motion"}
             self.send(msg)
         self.count += 1
-        time.sleep(1)
-        
+        return one_second        
 
 if __name__ == "__main__":
     block = MotionDummySource()

@@ -18,7 +18,7 @@ class HueBulbSource(PollingSource):
             print("Unknown bulb name. Here is the list of available bulbs at bridge " + self.bridge_addr + ":")
             print(light_objects_dict.keys())
         # self.bulb_id = self.bulb.light_id
-        self.begin_polling() #must call begin polling at end of polling source init function  
+        self.start_polling() #must call begin polling at end of polling source init function  
 
     def poll(self):
         state = {'bridge': self.bridge_addr, 'name': self.bulb_name}
@@ -36,7 +36,7 @@ class HueBulbSource(PollingSource):
         except KeyError:
             pass # lightstrips have no colortemp
         self.send(state)
-        sleep(self.poll_rate_secs)
+        return self.poll_rate_secs
 
 
 
