@@ -6,8 +6,10 @@ python -m src.lib.sources.motion_dummy_source -name "Simulated Livingroom Motion
 python -m src.lib.sources.timestamp_seconds_source -name 'Timestamp in Seconds' -out time/timestamps/seconds &
 
 # SINKS
-# put wemo sinks here
-python -m src.lib.sinks.hue_bulb_sink -name 'Lamp' -in livingroom/lights/cmds:hue/lights/cmds -params '{"bridge_addr": "10.0.0.225","bulb_name": "Lamp"}' &
+python -m src.lib.sinks.wemo_insight_sink -name 'Big Wall' -in livingroom/lights/cmds:wemo/cmds -params '{"ip_addr": "10.0.0.17"}' &
+python -m src.lib.sinks.wemo_insight_sink -name 'Small Wall' -in livingroom/lights/cmds:wemo/cmds -params '{"ip_addr": "10.0.0.229"}' &
+python -m src.lib.sinks.wemo_insight_sink -name 'Glass Bubbles' -in livingroom/lights/cmds:wemo/cmds -params '{"ip_addr": "10.0.0.145"}' &
+python -m src.lib.sinks.hue_bulb_sink -name 'Lamp' -in livingroom/lights/cmds:livingroom/alerts:hue/lights/cmds -params '{"bridge_addr": "10.0.0.225","bulb_name": "Lamp"}' &
 python -m src.lib.sinks.hue_bulb_sink -name 'Fan front' -in livingroom/lights/cmds:hue/lights/cmds -params '{"bridge_addr": "10.0.0.225","bulb_name": "Fan front"}' &
 python -m src.lib.sinks.hue_bulb_sink -name 'Fan back' -in livingroom/lights/cmds:hue/lights/cmds -params '{"bridge_addr": "10.0.0.225","bulb_name": "Fan back"}' &
 python -m src.lib.sinks.hue_bulb_sink -name 'Fan right' -in livingroom/lights/cmds:hue/lights/cmds -params '{"bridge_addr": "10.0.0.225","bulb_name": "Fan right"}' &
