@@ -1,4 +1,4 @@
-ode for Dolittle platform and Dolittle apps.
+Code for Dolittle platform and Dolittle apps.
 
 More text to come later.
 
