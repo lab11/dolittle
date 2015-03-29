@@ -1,0 +1,120 @@
+{
+	"lamp": [
+		{"daylight": 
+			{"on": true,
+			"brightness": 148,
+			"hue": 32596,
+			"saturation": 254,
+			"colormode": "xy",
+			"xy": [0.3303, 0.3625],
+			"colortemp": 178
+			}},
+		{"warm_bright":
+			{"on": true,
+			"brightness": 187,
+			"hue": 12895,
+			"saturation": 217,
+			"colormode": "xy",
+			"xy": [0.5176, 0.4143],
+			"colortemp": 480
+			}}
+		],
+	"fan_front": [
+		{"daylight": 
+			{"on": true,
+			"brightness": 186,
+			"hue": 15051,
+			"saturation": 137,
+			"colormode": "xy",
+			"xy": [0.4549, 0.4094],
+			"colortemp": 359
+			}},
+		{"warm_bright":
+			{"on": true,
+			"brightness": 254,
+			"hue": 14882,
+			"saturation": 146,
+			"colormode": "xy",
+			"xy": [0.4609, 0.4108],
+			"colortemp": 369
+			}}
+		],
+	"fan_back": [
+		{"daylight": 
+			{"on": true,
+			"brightness": 254,
+			"hue": 15051,
+			"saturation": 137,
+			"colormode": "xy",
+			"xy": [0.4549, 0.4094],
+			"colortemp": 359
+			}},
+		{"warm_bright":
+			{"on": true,
+			"brightness": 254,
+			"hue": 14882,
+			"saturation": 146,
+			"colormode": "xy",
+			"xy": [0.4609, 0.4108],
+			"colortemp": 369
+			}}
+		],
+	"fan_right": [
+		{"daylight": 
+			{"on": true,
+			"brightness": 241,
+			"hue": 31206,
+			"saturation": 254,
+			"colormode": "xy",
+			"xy": [0.3459, 0.3934],
+			"colortemp": 201
+			}},
+		{"warm_bright":
+			{"on": true,
+			"brightness": 254,
+			"hue": 14882,
+			"saturation": 146,
+			"colormode": "xy",
+			"xy": [0.4609, 0.4108],
+			"colortemp": 369
+			}}
+		],
+	"fan_left": [
+		{"daylight": 
+			{"on": true,
+			"brightness": 241,
+			"hue": 31206,
+			"saturation": 254,
+			"colormode": "xy",
+			"xy": [0.3459, 0.3934],
+			"colortemp": 201
+			}},
+		{"warm_bright":
+			{"on": true,
+			"brightness": 254,
+			"hue": 14882,
+			"saturation": 146,
+			"colormode": "xy",
+			"xy": [0.4609, 0.4108],
+			"colortemp": 369
+			}}
+		],
+	"kitchen": [
+		{"daylight": 
+			{"on": true,
+			"brightness": 254,
+			"hue": 39836,
+			"saturation": 105,
+			"colormode": "xy",
+			"xy": [0.318, 0.3323]
+			}},
+		{"warm_bright":
+			{"on": true,
+			"brightness": 254,
+			"hue": 39836,
+			"saturation": 105,
+			"colormode": "xy",
+			"xy": [0.318, 0.3323]
+			}}
+		]
+}
