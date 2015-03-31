@@ -1,4 +1,4 @@
-from ...core.source import Source
+from pyblocks.source import Source
 import IPy
 import json
 import sys

@@ -1,4 +1,4 @@
-from ...core.source import PollingSource
+from pyblocks.source import PollingSource
 from phue import Bridge
 import sys
 

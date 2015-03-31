@@ -1,4 +1,4 @@
-from ...core.source import PollingSource
+from pyblocks.source import PollingSource
 
 class TestMessageSource(PollingSource):
     def __init__(self):
