@@ -5,7 +5,7 @@ cd ../blocks
 cd sources
 # SOURCES
 #python test_message_source.py -name "Test Message" -out test/1 -params '{"message": {"type": "turn off"}, "delay_secs": 1}'
-python http_source.py -name "Test Server" -out http:http/ubi:http/motion -params '{"host": "10.0.0.239", "port": 8080}'
+python http_source.py -name "Test Server" -out http:http/ubi:http/motion -params '{"host": "10.0.0.239", "port": 8000}'
 
 cd ../sinks
 # SINKS
