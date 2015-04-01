@@ -4,13 +4,22 @@ class MasterControlBoard(Block):
 	def __init__(self):
         super(Processor, self).__init__()
 
-	def process(self, obj):
-		new_obj = str(obj)
-		# if msg_type == app:
+	def process(self, msg_json):
+		mag = msg_json
+		if msg["type"] == "control":
 			# for block in blocks, instantiate.
 			# send status
-		# if msg_type == status_request:
-			# send status
+			blocks = msg["blocks"]
+			
+		elif msg["type"] == "request":
+			if msg["request"] == "available_streams":
+				pass
+			elif msg["request"] == "stream_schema":
+				pass
+			elif msg["request"] == "available_devices":
+				pass
+			elif msg["request"] == "available_locations":
+				pass
 
 if __name__ == "__main__":
 	mcb = MasterControlBoard()
