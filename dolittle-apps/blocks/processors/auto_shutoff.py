@@ -1,4 +1,4 @@
-from ...core.processor import Processor
+from pyblocks.processor import Processor
 
 class AutoShutoff(Processor):
 	def __init__(self):
@@ -6,10 +6,10 @@ class AutoShutoff(Processor):
 
 		self.in_alert = False
 
-		self.alert = {"type": "alert"}
-		self.cancel_alert = {"type": "cancel_alert"}
-		self.turn_on = {"type": "turn_on"}
-		self.turn_off = {"type": "turn_off"}
+		self.alert = {"type": "alert", "msg": "start_alert"}
+		self.cancel_alert = {"type": "alert", "msg": "cancel_alert"}
+		self.turn_on = {"type": "cmd", "cmd": "turn_on"}
+		self.turn_off = {"type": "cmd", "cmd": "turn_off"}
 
 	def process(self, msg_json):
 		if msg_json["type"] == "motion_timer" and msg_json["event"] == "timer_expired":

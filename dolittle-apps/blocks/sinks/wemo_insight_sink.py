@@ -1,4 +1,4 @@
-from ...core.sink import Sink
+from pyblocks.sink import Sink
 import socket
 
 class WemoInsightSink(Sink):
@@ -31,10 +31,11 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
 
     def process(self, msg_json):
         msg = msg_json
-        if msg["type"].lower() in ["turn_off", "turn off"]:
-            self.turn_off()
-        elif msg["type"].lower() in ["turn_on", "turn on"]:
-            self.turn_on()
+        if msg["type"] == "cmd":
+            if msg["cmd"].lower() in ["turn_off", "turn off"]:
+                self.turn_off()
+            elif msg["cmd"].lower() in ["turn_on", "turn on"]:
+                self.turn_on()
 
     def turn_on(self):
         self.set_state('SetBinaryState', '1')

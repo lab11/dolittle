@@ -9,7 +9,7 @@ class TimestampSecondsSource(PollingSource):
     def poll(self):
         one_second = 1
         timestamp = int(time.time())
-        msg = {"type": "timestamp_secs", "timestamp": timestamp}
+        msg = {"type": "timestamp_seconds", "timestamp": timestamp}
         self.send(msg)
         return one_second
         

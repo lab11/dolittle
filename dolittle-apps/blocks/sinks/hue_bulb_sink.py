@@ -1,4 +1,4 @@
-from ...core.sink import Sink
+from pyblocks.sink import Sink
 from phue import Bridge
 import sys
 import random
@@ -42,18 +42,18 @@ class HueBulbSink(Sink):
 
     def process(self, msg_json):
         msg = msg_json
-        if msg["type"] == "alert":
+        if msg["type"] == "alert" and msg["msg"] == "start_alert":
             self.in_alert = True
             self.display_alert()
-        elif msg["type"] == "cancel_alert":
+        elif msg["type"] == "alert" and msg["msg"] == "cancel_alert":
             self.in_alert = False
             self.restore_stack()
-        elif msg["type"] == "turn_off":
+        elif msg["type"] == "cmd" and msg["cmd"] == "turn_off":
             if self.in_alert:
                 self.restore_stack()
             self.in_alert = False
             self.turn_off()
-        elif msg["type"] == "turn_on":
+        elif msg["type"] == "cmd" and msg["cmd"] == "turn_on":
             if self.in_alert:
                 self.in_alert = False
                 self.restore_stack()

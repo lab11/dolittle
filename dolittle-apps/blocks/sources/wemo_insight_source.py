@@ -31,9 +31,9 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         self.start_polling()
 
     def poll(self):
-        status = self.get_insight_status()
-        print(status)
-        self.send(status)
+        msg = self.get_insight_status()
+        msg["type"] = "status"
+        self.send(msg)
         return self.poll_rate_secs
 
     def get_insight_status(self):

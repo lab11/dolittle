@@ -34,7 +34,9 @@ class HueBulbSource(PollingSource):
             state['colortemp'] = self.bulb.colortemp
         except KeyError:
             pass # lightstrips have no colortemp
-        self.send(state)
+        msg = state
+        msg["type"] = "status"
+        self.send(msg)
         return self.poll_rate_secs
 
 
