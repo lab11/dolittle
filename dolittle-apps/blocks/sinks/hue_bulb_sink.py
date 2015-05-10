@@ -39,6 +39,7 @@ class HueBulbSink(Sink):
             except PhueRegistrationException:
                 print(str(self.name) + ": The link button has not been pressed in the last 30 seconds. Trying again in 10 seconds.")
                 sleep(10)
+        print(str(self.name) + ": Connected to Hue bulb.")
 
         self.in_alert = False
         self.stack = {}
