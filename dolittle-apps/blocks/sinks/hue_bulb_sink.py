@@ -36,6 +36,10 @@ class HueBulbSink(Sink):
                 success = True
             except socket.error:
                 sleep(random.random())
+            except phue.PhueRegistrationException:
+                print("The link button has not been pressed in the last 30 seconds.")
+                print("Trying again in 10 seconds.")
+                sleep(10)
 
         self.in_alert = False
         self.stack = {}
