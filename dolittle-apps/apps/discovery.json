@@ -1,0 +1,99 @@
+{
+"app_name": "auto_living_room_lights",
+"streams": [
+ {
+    "stream_name": "time/timestamps/timestamp_seconds",
+    "add_publishers": [
+       {"block_name": "Timestamp in Seconds"}]
+    },
+ {
+ 	"stream_name": "wemo/cmds",
+ 	"add_subscribers": [
+       {"block_name": "Big Wall"},
+       {"block_name": "Small Wall"},
+       {"block_name": "Glass Bubbles"}]
+ 	},
+ {
+ 	"stream_name": "hue/cmds",
+ 	"add_subscribers": [
+       {"block_name": "Lamp"},
+       {"block_name": "Fan front"},
+       {"block_name": "Fan back"},
+       {"block_name": "Fan right"},
+       {"block_name": "Fan left"}]
+ 	},
+ {
+    "stream_name": "livingroom/motion",
+    "add_publishers": [
+       {"block_name": "Simulated Livingroom Motion Data"}]
+    },
+ { 
+ 	"stream_name": "livingroom/lights/cmds",
+ 	"add_subscribers": [
+       {"block_name": "Big Wall"},
+       {"block_name": "Small Wall"},
+       {"block_name": "Glass Bubbles"},
+       {"block_name": "Lamp"},
+       {"block_name": "Fan front"},
+       {"block_name": "Fan back"},
+       {"block_name": "Fan right"},
+       {"block_name": "Fan left"}]
+ 	},
+ {
+ 	"stream_name": "livingroom/alerts",
+ 	"add_subscribers": [
+       {"block_name": "Lamp"}]
+ 	}
+],
+"blocks": [
+ {
+    "code": "motion_dummy_source.py",
+    "block_name": "Simulated Livingroom Motion Data",
+    "params": {}
+    },
+ {
+    "code": "timestamp_seconds_source.py",
+    "block_name": "Timestamp in Seconds",
+    "params": {}
+    },
+ {
+ 	"code": "wemo_insight_sink.py",
+ 	"block_name": "Big Wall",
+ 	"params": {"ip_addr": "10.0.0.17"}
+    },
+ {
+ 	"code": "wemo_insight_sink.py",
+ 	"block_name": "Small Wall",
+ 	"params": {"ip_addr": "10.0.0.229"}
+    },
+ {
+ 	"code": "wemo_insight_sink.py",
+ 	"block_name": "Glass Bubbles",
+ 	"params": {"ip_addr": "10.0.0.145"}
+    },
+ {
+ 	"code": "hue_bulb_sink.py",
+ 	"block_name": "Lamp",
+ 	"params": {"bridge_addr": "10.0.0.225","bulb_name": "Lamp"}
+    },
+ {
+ 	"code": "hue_bulb_sink.py",
+ 	"block_name": "Fan front",
+ 	"params": {"bridge_addr": "10.0.0.225","bulb_name": "Fan front"}
+    },
+ {
+ 	"code": "hue_bulb_sink.py",
+ 	"block_name": "Fan back",
+ 	"params": {"bridge_addr": "10.0.0.225","bulb_name": "Fan back"}
+    },
+ {
+ 	"code": "hue_bulb_sink.py",
+ 	"block_name": "Fan right",
+ 	"params": {"bridge_addr": "10.0.0.225","bulb_name": "Fan right"}
+    },
+ {
+ 	"code": "hue_bulb_sink.py",
+ 	"block_name": "Fan left",
+ 	"params": {"bridge_addr": "10.0.0.225","bulb_name": "Fan left"}
+    }
+]}

@@ -1,0 +1,58 @@
+{
+"app_name": "auto_living_room_lights",
+"streams": [
+ {
+    "stream_name": "time/timestamps/timestamp_seconds",
+    "add_subscribers": [
+        {"block_name": "Livingroom Alert Timer"},
+        {"block_name": "Livingroom Motion Timer"}]
+    },
+ {
+    "stream_name": "livingroom/motion",
+    "add_subscribers": [
+        {"block_name": "Livingroom Motion Timer"}]
+    },
+  { 
+    "stream_name": "livingroom/lights/cmds",
+    "add_publishers": [
+        {"block_name": "Livingroom Autoshutoff"}]
+    },
+ {
+    "stream_name": "livingroom/alerts",
+    "add_publishers": [
+        {"block_name": "Livingroom Autoshutoff"}],
+    "add_subscribers": [
+        {"block_name": "Livingroom Alert Timer"}]
+    }
+ {
+    "stream_name": "livingroom/timers/motion_timers",
+    "add_publishers": [
+        {"block_name": "Livingroom Motion Timer"}],
+    "add_subscribers": [
+        {"block_name": "Livingroom Autoshutoff"}]
+    },
+ {
+    "stream_name": "livingroom/timers/alert_timers",
+    "add_publishers": [
+        {"block_name": "Livingroom Alert Timer"}],
+    "add_subscribers": [
+        {"block_name": "Livingroom Autoshutoff"}]
+    }
+],
+"blocks": [
+  {
+    "code": "motion_timer.py",
+    "block_name": "Livingroom Motion Timer",
+    "params": {"duration_secs": 10}
+    },
+  {
+    "code": "alert_timer.py",
+    "block_name": "Livingroom Alert Timer",
+    "params": {"duration_secs": 5}
+    },
+  {
+    "code": "auto_shutoff.py",
+    "block_name": "Livingroom Autoshutoff",
+    "params": {}
+  }
+]}
