@@ -1,14 +1,25 @@
 from master_control_board_block import MCBBlock
-from zeroconf import ServiceInfo, ServiceBrowser, Zeroconf
+import socket
+import thread
+
 
 class MasterControlBoard(MCBBlock):
     def __init__(self):
         super(MasterControlBoard, self).__init__()
-        self.name = 'localhost'
+        self.name = socket.gethostname()
+
+        # Default (local) MQTT broker settings
         self.broker_port = 1883
         self.broker_addr = 'localhost'
+
+        # Zeroconf settings
+        # Can this device be master of the universe?
+        # True => will host Dolittle service on LAN if none found. False => will only run Dolittle locally.
+        # Only select True if the host device has consistent uptime. 
+        # ATM, if the LAN master goes down, all Dolittle comms on any device on the LAN will cease.
         self.can_be_master = True
 
+        # State about the Dolittle system
         self.shell_commands = []
         self.apps = []
         self.streams = {}
@@ -18,22 +29,22 @@ class MasterControlBoard(MCBBlock):
 
         # start local block watchdog
 
-        # set up multi-device messaging domain
+        # connect to Dolittle messaging domain
         service_info = self.get_dolittle_service_info()
         if service_info != None: 
             self.broker_addr, self.broker_port = service_info
             print("DOLITTLE: Found Dolittle service on LAN at {}:{}".format(self.broker_addr, self.broker_port))
-            self.join_dolittle_service()
+            self.is_master = False
+            print("DOLITTLE: Joined local Dolittle messaging domain.")
         else:
-            print("DOLITTLE: No existing Dolittle service found on LAN."
-            print("Should I provide the Dolittle service to the LAN, or just run locally?")
-
+            print("DOLITTLE: No existing Dolittle service found on LAN.") 
+            #print("Should I provide the Dolittle service to the LAN, or just run locally?")
             if self.can_be_master == True:
-            print("DOLITTLE: I am now master of the universe. Advertising service.")f
-            self.spawn_dolittle_service()
-
+                print("DOLITTLE: I am now master of the universe. Advertising service.")
+                self.spawn_dolittle_service()
+                self.is_master = True
+        self.join_dolittle_service()
         self.send({"msg": "Hello"})
-
 
     def process(self, msg_json):
         mag = msg_json
@@ -75,24 +86,6 @@ class MasterControlBoard(MCBBlock):
             elif msg["request"] == "available_locations":
                 pass
 
-    def get_dolittle_service_info(self):
-        service_info = None
-        zeroconf = Zeroconf()
-        name = "dolittle_mqtt._tcp.local."
-        info = ServiceInfo("_mqtt._tcp.local.", "dolittle._mqtt._tcp.local.")
-        exists = info.request(zeroconf, 1000)
-        if exists:
-            service_info = (info.server[:-1], info.port)
-        zeroconf.close()
-        return service_info
-
-    def join_dolittle_service(self):
-        self.start_messaging_interface()
-
-    def spawn_dolittle_service(self):
-        # register zeroconf dolittle service
-        pass
-
     def watchdog(self):
         for cmd in self.shell_commands:
             #if not in ps aux, then execute
@@ -103,4 +96,10 @@ if __name__ == "__main__":
     name = mcb.name
     mcb.in_streams = ['dolittle/apps']
     mcb.out_streams = ['dolittle/status']
-    mcb.client.loop_forever()
+    print("WOO")
+    print(mcb.broker_addr)
+    try:
+        mcb.client.loop_forever()
+    except KeyboardInterrupt:
+        if mcb.is_master:
+            mcb.unregister_dolittle_service()

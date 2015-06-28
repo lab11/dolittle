@@ -6,6 +6,7 @@ from sys import argv, exit
 import json
 from pattern.en import singularize, pluralize
 from copy import copy
+from zeroconf import ServiceInfo, ServiceBrowser, Zeroconf
 
 class MCBBlock(object):
     #def __init__(self, name = None, in_streams = None, out_streams = None, broker_port = 1883, broker_addr = 'localhost'):
@@ -17,7 +18,7 @@ class MCBBlock(object):
         self.out_streams = []
         self.params = "" #JSON blob
 
-        # MQTT connection
+        # MQTT connection info
         self.connected = False
         self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
@@ -25,7 +26,22 @@ class MCBBlock(object):
         self.client.on_subscribe = self.on_subscribe
         self.client.on_message = self.receive
 
+        # Zeroconf networking and service info
+        dummy_addr = '10.0.0.0'
+        link_local_addr = [(s.connect((dummy_addr, 80)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]
+        self.HOST = link_local_addr
+        self.PORT = self.broker_port
+        self.DOMAIN = ".local."
+        self.SERVICE_TYPE = "_mqtt._tcp" + self.DOMAIN 
+        self.SERVICE_NAME = "dolittle"
+        self.FULL_SERVICE_NAME = self.SERVICE_NAME + "." + self.SERVICE_TYPE
+        self.LOCAL_ADDR = socket.inet_aton(self.HOST)
+        self.LOCAL_NAME = socket.gethostname() + self.DOMAIN
+        self.is_master = None
+
     def start_messaging_interface(self):
+        print("HERE")
+        print(self.broker_addr)
         self.client.connect(self.broker_addr)
         while(self.connected == False):
             self.client.loop()
@@ -141,5 +157,34 @@ class MCBBlock(object):
         else:
             string_msg = json.dumps(msg)
         return string_msg
+
+
+    ############# Zeroconf/Dolittle Service Functions #############
+
+    def get_dolittle_service_info(self):
+        service_info = None
+        self.zeroconf = Zeroconf()
+        info = ServiceInfo(self.SERVICE_TYPE, self.FULL_SERVICE_NAME)
+        exists = info.request(self.zeroconf, 1000)
+        if exists:
+            service_info = (info.server[:-1], info.port)
+        self.zeroconf.close()
+        return service_info
+
+    def join_dolittle_service(self):
+        self.start_messaging_interface()
+
+    def spawn_dolittle_service(self):
+        # register zeroconf dolittle service
+        #self.service_info = ServiceInfo(self.SERVICE_TYPE, self.SERVICE_NAME, self.LOCAL_ADDR, self.PORT, 0, 0, {}, self.LOCAL_NAME)
+        self.service_info = ServiceInfo("_mqtt._tcp.local.", "dolittle._mqtt._tcp.local.", self.LOCAL_ADDR, self.PORT, 0, 0, {}, self.LOCAL_NAME)
+        self.zeroconf = Zeroconf()
+        thread.start_new_thread(self.zeroconf.register_service, (self.service_info,))
+
+    def unregister_dolittle_service(self):
+        self.zeroconf.unregister_service(self.service_info)
+        self.zeroconf.close()
+
+
 
 
