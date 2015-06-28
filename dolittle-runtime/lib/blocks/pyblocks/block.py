@@ -5,6 +5,7 @@ import re
 from sys import argv, exit
 import json
 from pattern.en import singularize, pluralize
+from copy import copy
 
 class Block(object):
     #def __init__(self, name = None, in_streams = None, out_streams = None, broker_port = 1883, broker_addr = 'localhost'):
@@ -131,13 +132,17 @@ class Block(object):
         for out_stream in self.out_streams:
             if self.matches_end(msg_type, out_stream):
                 at_least_one_match = True
-                self.client.publish(out_stream, msg)
-                print("published " + str(msg))
+                final_msg = copy(msg_json)
+                final_msg["stream"] = out_stream
+                self.client.publish(out_stream, json.dumps(final_msg))
+                print("published " + str(final_msg))
         if at_least_one_match == False:
             #then send to all
             for out_stream in self.out_streams:
-                self.client.publish(out_stream, msg)
-                print("published " + str(msg))
+                final_msg = copy(msg_json)
+                final_msg["stream"] = out_stream
+                self.client.publish(out_stream, json.dumps(final_msg))
+                print("published " + str(final_msg))
 
 
     def matches_end(self, msg_type, stream_name):
