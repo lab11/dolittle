@@ -1,4 +1,4 @@
-from ...core.processor import Processor
+from pyblocks.processor import Processor
 
 class MotionTimer(Processor):
 	def __init__(self):
@@ -18,7 +18,7 @@ class MotionTimer(Processor):
 			self.reset()
 			self.enabled = True
 			self.send(self.start_msg)
-		elif msg_json["type"] == "timestamp_secs":
+		elif msg_json["type"] == "timestamp_seconds":
 			if self.enabled:
 				if self.last_seen_timestamp == None:
 					self.last_seen_timestamp = msg_json["timestamp"]

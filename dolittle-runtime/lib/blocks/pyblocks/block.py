@@ -1,8 +1,11 @@
 import paho.mqtt.client as mqtt
 import thread
 import time
+import re
 from sys import argv, exit
 import json
+from pattern.en import singularize, pluralize
+from copy import copy
 
 class Block(object):
     #def __init__(self, name = None, in_streams = None, out_streams = None, broker_port = 1883, broker_addr = 'localhost'):
@@ -123,9 +126,42 @@ class Block(object):
 
     def emit(self):
         msg = self.send_buffer.pop(0)
+        msg_json = json.loads(msg)
+        msg_type = msg_json["type"] if "type" in msg else None
+        at_least_one_match = False
         for out_stream in self.out_streams:
-            self.client.publish(out_stream, msg)
-        print("published " + str(msg))
+            if self.matches_end(msg_type, out_stream):
+                at_least_one_match = True
+                final_msg = copy(msg_json)
+                final_msg["stream"] = out_stream
+                self.client.publish(out_stream, json.dumps(final_msg))
+                print("published " + str(final_msg))
+        if at_least_one_match == False:
+            #then send to all
+            for out_stream in self.out_streams:
+                final_msg = copy(msg_json)
+                final_msg["stream"] = out_stream
+                self.client.publish(out_stream, json.dumps(final_msg))
+                print("published " + str(final_msg))
+
+
+    def matches_end(self, msg_type, stream_name):
+        if msg_type != None:
+            topic_path = msg_type.split("/")
+            front_matter = topic_path[:-1]
+            last_word = topic_path[-1]
+            singular = singularize(last_word)
+            plural = pluralize(singular)
+            msg_type_singular = "/".join(front_matter + [singular])
+            msg_type_plural = "/".join(front_matter + [plural])
+            patterns = [msg_type_plural + "$", msg_type_singular + "$"]
+        else:
+            patterns = [".*"]
+        is_match = False
+        for pattern in patterns:
+            if None != re.search(pattern, stream_name):
+                is_match = True
+        return is_match
 
     def send(self, msg):
         msg = self.validate(msg)
@@ -135,10 +171,5 @@ class Block(object):
     # might push to library to define msgs
     def validate(self, msg):
         return json.dumps(msg)
-
-
-if __name__ == "__main__":
-    p = Processor()
-    p.client.loop_forever()
 
 

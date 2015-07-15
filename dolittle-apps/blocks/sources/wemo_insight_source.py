@@ -1,4 +1,4 @@
-from ...core.source import PollingSource
+from pyblocks.source import PollingSource
 import socket
 
 class WemoInsightSource(PollingSource):
@@ -31,9 +31,9 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         self.start_polling()
 
     def poll(self):
-        status = self.get_insight_status()
-        print(status)
-        self.send(status)
+        msg = self.get_insight_status()
+        msg["type"] = "status"
+        self.send(msg)
         return self.poll_rate_secs
 
     def get_insight_status(self):
@@ -46,7 +46,7 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         status = self.process_insight_status_string(response[start_index:end_index])
         status['ip_addr'] = self.ip_addr
         status['port'] = self.current_port
-        status['device_name'] = self.device_name
+        status['name'] = self.device_name
         status['device_type'] = 'Wemo Insight'
         return status
         #return response
@@ -68,7 +68,7 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         status_str = str(status_str)
         status = {}
         fields = status_str.split('|')
-        status['is_on'] = (int(fields[0]) == 1)
+        status['on'] = (int(fields[0]) == 1)
         status['last_transition_timestamp'] = fields[1]
         status['on_for_secs'] = fields[2]
         status['on_today_for_secs'] = fields[3]
@@ -125,11 +125,6 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
 if __name__ == "__main__":
     block = WemoInsightSource()
     block.client.loop_forever()
-
-    """
-    from dolittle pkg root:
-    python -m src.lib.sources.wemo_insight_source -name 'Wemo Dummy' -out livingroom/lights:livingroom/wemo:wemo -params '{"ip_addr": "10.0.0.17", "device_name": "Flea"}'
-    """
     # 17 (Flea), 145 (Bee), 229 (Caterpillar)
 
     # host send 2 insight basicevent GetBinaryState, SetBinaryState

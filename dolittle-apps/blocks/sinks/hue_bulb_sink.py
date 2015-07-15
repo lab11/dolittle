@@ -1,5 +1,5 @@
-from ...core.sink import Sink
-from phue import Bridge
+from pyblocks.sink import Sink
+from phue import Bridge, PhueRegistrationException
 import sys
 import random
 import socket
@@ -36,24 +36,28 @@ class HueBulbSink(Sink):
                 success = True
             except socket.error:
                 sleep(random.random())
+            except PhueRegistrationException:
+                print(str(self.name) + ": The link button has not been pressed in the last 30 seconds. Trying again in 10 seconds.")
+                sleep(10)
+        print(str(self.name) + ": Connected to Hue bulb.")
 
         self.in_alert = False
         self.stack = {}
 
     def process(self, msg_json):
         msg = msg_json
-        if msg["type"] == "alert":
+        if "alert" in msg["type"] and msg["msg"] == "start_alert":
             self.in_alert = True
             self.display_alert()
-        elif msg["type"] == "cancel_alert":
+        elif "alert" in msg["type"] and msg["msg"] == "cancel_alert":
             self.in_alert = False
             self.restore_stack()
-        elif msg["type"] == "turn_off":
+        elif "cmd" in msg["type"] and msg["cmd"] == "turn_off":
             if self.in_alert:
                 self.restore_stack()
             self.in_alert = False
             self.turn_off()
-        elif msg["type"] == "turn_on":
+        elif "cmd" in msg["type"] and msg["cmd"] == "turn_on":
             if self.in_alert:
                 self.in_alert = False
                 self.restore_stack()

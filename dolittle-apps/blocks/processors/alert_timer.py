@@ -1,4 +1,4 @@
-from ...core.processor import Processor
+from pyblocks.processor import Processor
 
 class AlertTimer(Processor):
 	def __init__(self):
@@ -15,17 +15,17 @@ class AlertTimer(Processor):
 
 
 	def process(self, msg_json):
-		if msg_json["type"] == "alert":
+		if msg_json["type"] == "alert" and msg_json["msg"] == "start_alert":
 			self.reset()
 			self.enabled = True
 			self.send(self.start_msg)
 
-		elif msg_json["type"] == "cancel_alert":
+		elif msg_json["type"] == "alert" and msg_json["msg"] == "cancel_alert":
 			self.enabled = False
 			self.reset()
 			self.send(self.cancelled_msg)
 
-		elif msg_json["type"] == "timestamp_secs":
+		elif msg_json["type"] == "timestamp_seconds":
 			if self.enabled:
 				if self.last_seen_timestamp == None:
 					self.last_seen_timestamp = msg_json["timestamp"]
