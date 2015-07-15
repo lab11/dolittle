@@ -9,11 +9,13 @@ class SocketSource(PollingSource):
         super(SocketSource, self).__init__()
         self.TCP_IP = self.params['host']
         self.TCP_PORT = self.params['port']
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.bind((self.TCP_IP, self.TCP_PORT))
+        
         self.start_polling()
 
     def poll(self):
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        self.s.bind((self.TCP_IP, self.TCP_PORT))
         self.s.listen(1)
         self.conn, addr = self.s.accept()
         while 1:
@@ -33,4 +35,7 @@ if __name__ == "__main__":
     try:
         block.client.loop_forever()
     except KeyboardInterrupt:
-        block.conn.close()
+        try:
+            block.conn.close()
+        except:
+            pass
