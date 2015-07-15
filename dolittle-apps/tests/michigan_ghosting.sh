@@ -5,7 +5,7 @@ cd ../blocks/sources
 # SOURCES
 
 # External
- python socket_source.py -name "JSON Socket In" -out ghosting/in -params '{"host": "localhost", "port": 8000}' &
+ python socket_source.py -name "JSON Input Client" -out ghosting/in -params '{"host": "localhost", "port": 8080}' &
 
 # Living Room
 #python hue_bulb_source.py -name 'Lamp' -out livingroom/lights/status -params '{"bridge_addr": "10.0.0.225","bulb_name": "Lamp"}' &
@@ -19,6 +19,10 @@ cd ../blocks/sources
 # python lifx_source.py -name 'Closet' -out bedroom/lights/status -params '{"mac_addr": "d0:73:d5:02:6c:ea","ip_addr": "10.0.0.115"}' &
 #python wemo_insight_source.py -name 'Bedroom Xmas' -out bedroom/lights/status -params '{"ip_addr": "10.0.0.17"}' &
 
+# Bathroom
+
+# Kitchen
+
 
 cd ../processors
 
@@ -30,7 +34,7 @@ python ghosting_app.py -name "Meghan Ghosting" -in livingroom/lights/status:bedr
 cd ../sinks
 
 # External
-python socket_sink.py -name "JSON Output Client" -in ghosting/out -params '{"dest": "daniel.connected.house", "port": 7774}' &
+python socket_sink.py -name "JSON Output Client" -in ghosting/out -params '{"dest": "70.110.28.225", "port": 7774}' &
 
 # Living Room
 #python hue_bulb_sink.py -name 'Lamp' -in livingroom/lights/cmds -params '{"bridge_addr": "10.0.0.225","bulb_name": "Lamp"}' &

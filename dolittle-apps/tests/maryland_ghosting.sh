@@ -5,7 +5,7 @@ cd ../blocks/sources
 # SOURCES
 
 # External
- python socket_source.py -name "JSON Socket In" -out ghosting/in -params '{"host": "localhost", "port": 7774}' &
+ python socket_source.py -name "JSON Input Client" -out ghosting/in -params '{"host": "localhost", "port": 7774}' &
 
 # Living Room
 #python hue_bulb_source.py -name 'livingroom1' -out livingroom/lights/status -params '{"bridge_addr": "192.168.1.4","bulb_name": "livingroom1"}' &
@@ -29,7 +29,7 @@ python ghosting_app.py -name "Daniel Ghosting" -in livingroom/lights/status:bedr
 cd ../sinks
 
 # External
-python socket_sink.py -name "JSON Output Client" -in ghosting/out -params '{"dest": "meghan.connected.house", "port": 8080}' &
+python socket_sink.py -name "JSON Output Client" -in ghosting/out -params '{"dest": "107.4.83.157", "port": 8080}' &
 
 # Living Room
 #python hue_bulb_sink.py -name 'livingroom1' -in livingroom/lights/cmds -params '{"bridge_addr": "192.168.1.4","bulb_name": "livingroom1"}' &
