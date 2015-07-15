@@ -68,7 +68,7 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         status_str = str(status_str)
         status = {}
         fields = status_str.split('|')
-        status['is_on'] = (int(fields[0]) == 1)
+        status['on'] = (int(fields[0]) == 1)
         status['last_transition_timestamp'] = fields[1]
         status['on_for_secs'] = fields[2]
         status['on_today_for_secs'] = fields[3]
