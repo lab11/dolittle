@@ -10,7 +10,7 @@ class LifxSource(PollingSource):
         lifxlan = LifxLAN()
         self.bulb = Light(self.mac_addr, service=1, port=56700, source_id=lifxlan.source_id, ip_addr=self.ip_addr)
 
-        self.poll_rate_secs = 1
+        self.poll_rate_secs = 2
         self.start_polling() #must call start polling at end of polling source init function  
 
     def poll(self):
