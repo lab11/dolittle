@@ -5,7 +5,7 @@ cd ../blocks/sources
 # SOURCES
 
 # External
- python socket_source.py -name "JSON Input Client" -out ghosting/in -params '{"port": 8080}' &
+ python socket_source.py -name "JSON Input Client" -out ghosting/in -params '{"host": "10.0.0.239", "port": 8080}' &
 
 # Living Room
 #python hue_bulb_source.py -name 'Lamp' -out livingroom/lights/status -params '{"bridge_addr": "10.0.0.225","bulb_name": "Lamp"}' &
