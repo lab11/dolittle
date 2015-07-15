@@ -2,19 +2,18 @@ from pyblocks.source import PollingSource
 import socket
 import json
 
-BUFFER_SIZE = 64  # Normally 1024, but we want fast response
+BUFFER_SIZE = 1024  # Normally 1024, but we want fast response
 
 class SocketSource(PollingSource):
     def __init__(self, *args):
         super(SocketSource, self).__init__()
         self.TCP_IP = self.params['host']
         self.TCP_PORT = self.params['port']
-
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.bind((self.TCP_IP, self.TCP_PORT))
         self.start_polling()
 
     def poll(self):
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.bind((self.TCP_IP, self.TCP_PORT))
         self.s.listen(1)
         self.conn, addr = self.s.accept()
         while 1:

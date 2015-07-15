@@ -2,7 +2,7 @@ from pyblocks.sink import Sink
 import socket
 import json
 
-BUFFER_SIZE = 64
+BUFFER_SIZE = 1024
 
 class SocketSink(Sink):
     def __init__(self):
