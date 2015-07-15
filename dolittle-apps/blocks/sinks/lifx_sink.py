@@ -15,18 +15,18 @@ class LifxSink(Sink):
 
     def process(self, msg_json):
         msg = msg_json
-        if msg["type"] == "alert" and msg["msg"] == "start_alert":
+        if "alert" in msg["type"] and msg["msg"] == "start_alert":
             self.in_alert = True
             self.display_alert()
-        elif msg["type"] == "alert" and msg["msg"] == "cancel_alert":
+        elif "alert" in msg["type"] and msg["msg"] == "cancel_alert":
             self.in_alert = False
             self.restore_stack()
-        elif msg["type"] == "cmd" and msg["cmd"] == "turn_off":
+        elif "cmd" in msg["type"] and msg["cmd"] == "turn_off":
             if self.in_alert:
                 self.restore_stack()
             self.in_alert = False
             self.turn_off()
-        elif msg["type"] == "cmd" and msg["cmd"] == "turn_on":
+        elif "cmd" in msg["type"] and msg["cmd"] == "turn_on":
             if self.in_alert:
                 self.in_alert = False
                 self.restore_stack()

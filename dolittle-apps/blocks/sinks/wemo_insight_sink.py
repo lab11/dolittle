@@ -31,7 +31,7 @@ s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
 
     def process(self, msg_json):
         msg = msg_json
-        if msg["type"] == "cmd":
+        if "cmd" in msg["type"]:
             if msg["cmd"].lower() in ["turn_off", "turn off"]:
                 self.turn_off()
             elif msg["cmd"].lower() in ["turn_on", "turn on"]:
