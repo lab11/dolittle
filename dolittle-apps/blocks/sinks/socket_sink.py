@@ -1,4 +1,4 @@
-sfrom pyblocks.sink import Sink
+from pyblocks.sink import Sink
 import socket
 import json
 
