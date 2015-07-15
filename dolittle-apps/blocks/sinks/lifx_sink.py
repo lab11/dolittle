@@ -15,6 +15,7 @@ class LifxSink(Sink):
 
     def process(self, msg_json):
         msg = msg_json
+        print(msg)
         if "alert" in msg["type"] and msg["msg"] == "start_alert":
             self.in_alert = True
             self.display_alert()
