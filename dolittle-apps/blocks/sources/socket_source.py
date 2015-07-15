@@ -10,12 +10,12 @@ class SocketSource(PollingSource):
         TCP_IP = self.params['host']
         TCP_PORT = self.params['port']
 
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.bind((TCP_IP, TCP_PORT))
-        self.s.listen(1)
         self.start_polling()
 
     def poll(self):
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.bind((TCP_IP, TCP_PORT))
+        self.s.listen(1)
         self.conn, addr = self.s.accept()
         while 1:
             data = self.conn.recv(BUFFER_SIZE)
@@ -25,6 +25,7 @@ class SocketSource(PollingSource):
             except:
                 print("Received non-JSON data from {}: {}".format(addr, data))
         self.conn.close()
+        self.s.close()
         return 0
 
 

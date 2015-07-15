@@ -9,9 +9,9 @@ class SocketSink(Sink):
         super(SocketSink, self).__init__()
         self.dest = self.params['dest']
         self.port = self.params['port']
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def process(self, msg_json):
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.connect((self.dest, self.port))
         self.s.send(json.dumps(msg_json))
         self.s.close()
