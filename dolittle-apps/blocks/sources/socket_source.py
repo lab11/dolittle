@@ -7,7 +7,7 @@ BUFFER_SIZE = 64  # Normally 1024, but we want fast response
 class SocketSource(PollingSource):
     def __init__(self, *args):
         super(SocketSource, self).__init__()
-        TCP_IP = self.params['host']
+        TCP_IP = socket.gethostname()
         TCP_PORT = self.params['port']
 
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
