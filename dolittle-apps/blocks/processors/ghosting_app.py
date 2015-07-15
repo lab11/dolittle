@@ -24,6 +24,7 @@ class GhostingApp(Processor):
 			room = msg['stream'].split('/')[0]
 			device_name = msg["name"]
 			current_power_state = msg["on"]
+			state_change = False
 			if device_name not in self.last_state:
 				self.last_state[device_name] = current_power_state
 			if current_power_state != self.last_state[device_name]:
